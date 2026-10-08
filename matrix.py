@@ -84,6 +84,18 @@ def vector_add(a, b):
 
     return output
 
+def vector_element_wise_multiplication(a, b):
+    if len(a) != len(b):
+        raise ValueError("Vectors must have the same size")
+
+    output = []
+
+    for i in range(len(a)):
+        output.append(a[i] * b[i])
+
+    return output
+
+
 def add_bias(X, b):
     output = []
 
