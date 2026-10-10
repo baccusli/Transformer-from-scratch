@@ -12,10 +12,10 @@ def variance(x):
 
     return variance_sum / len(x)
 
-def normalize(x):
+def normalize(x, epsilon):
     m = mean(x)
     var = variance(x)
-    std = (var + 1e-5) ** 0.5
+    std = (var + epsilon) ** 0.5
 
     normalized_values = []
 
@@ -24,16 +24,16 @@ def normalize(x):
 
     return normalized_values, std
 
-def layerNorm(x, gamma, beta):
+def layerNorm_forward(x, gamma, beta, epsilon):
     X_norm = []
     normalized_X = []
     std_X = []
 
     for row_x in x:
-        row, std = normalize(row_x)
+        row, std = normalize(row_x, epsilon)
         normalized_X.append(row)
         std_X.append(std)
-        
+         
         scaled = vector_element_wise_multiplication(row, gamma)
         shifted = vector_add(scaled, beta)
         X_norm.append(shifted)
@@ -69,3 +69,22 @@ def layerNorm_backward(gamma, normalized, dY, stds):
         dX.append(dX_row)
 
     return dX, dGamma, dBeta
+
+class LayerNorm:
+    def __init__(self, d_model, epsilon = 1e-5):
+        self.gamma = [1.0] * d_model
+        self.beta = [0.0] * d_model
+        self.epsilon = epsilon
+
+        self.normalized = None
+        self.std = None
+
+    def forward(self, X):
+        X_norm, self.normalized, self.std = layerNorm_forward(X, self.gamma, self.beta, self.epsilon)
+
+        return X_norm
+
+    def backward(self, dY):
+        dX, dGamma, dBeta = layerNorm_backward(self.gamma, self.normalized, dY, self.std)
+
+        return dX, dGamma, dBeta
