@@ -77,14 +77,17 @@ class LayerNorm:
         self.epsilon = epsilon
 
         self.normalized = None
-        self.std = None
+        self.stds = None
 
     def forward(self, X):
-        X_norm, self.normalized, self.std = layerNorm_forward(X, self.gamma, self.beta, self.epsilon)
+        X_norm, self.normalized, self.stds = layerNorm_forward(X, self.gamma, self.beta, self.epsilon)
 
         return X_norm
 
     def backward(self, dY):
-        dX, dGamma, dBeta = layerNorm_backward(self.gamma, self.normalized, dY, self.std)
+        if self.normalized is None or self.stds is None:
+            raise RuntimeError("Call forward before backward()")
+
+        dX, dGamma, dBeta = layerNorm_backward(self.gamma, self.normalized, dY, self.stds)
 
         return dX, dGamma, dBeta
