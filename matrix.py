@@ -105,6 +105,48 @@ def add_bias(X, b):
     return output
 
 def random_matrix(rows, columns):
-    output = [[random.uniform(-0.1, 0.1) for column in range (columns)] for row in range (rows)]
+    output = [[random.uniform(-0.1, 0.1) for _ in range (columns)] for _ in range (rows)]
+
+    return output
+
+def relu(A):
+    rows = len(A)
+    columns = len(A[0])
+
+    output = [[0 for _ in range(columns)] for _ in range(rows)]
+
+    for row in range (rows):
+            for column in range (columns):
+                output[row][column] = max(0.0, A[row][column])
+
+    return output
+
+def relu_derivative(A):
+    rows = len(A)
+    columns = len(A[0])
+
+    output = [[0 for _ in range(columns)] for _ in range(rows)]
+
+    for row in range (rows):
+        for column in range (columns):
+            derivative = 1.0 if A[row][column] > 0 else 0.0
+            output[row][column] = derivative
+
+    return output
+
+def relu_backward(H, dA):
+    derivative = relu_derivative(H)
+    dH = element_wise_multiplication(derivative, dA)
+
+    return dH
+
+def vector_add(a, b):
+    if len(a) != len(b):
+        raise ValueError("Vectors must have the same size")
+
+    output = []
+
+    for i in range(len(a)):
+        output.append(a[i] + b[i])
 
     return output
