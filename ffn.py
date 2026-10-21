@@ -1,12 +1,12 @@
-from matrix import matmul, transpose, add_bias, relu, random_matrix, vector_add, relu_backward
+from matrix import matmul, transpose, add_bias, relu, random_matrix, random_vector, vector_add, relu_backward
 
 class FFN:
     def __init__(self, input_dim, hidden_dim):
         self.W1 = random_matrix(input_dim, hidden_dim)
-        self.b1 = random_matrix(1, hidden_dim)
+        self.b1 = random_vector(hidden_dim)
 
         self.W2 = random_matrix(hidden_dim, input_dim)
-        self.b2 = random_matrix(1, input_dim)
+        self.b2 = random_vector(input_dim)
 
         self.X = None
         self.H = None
@@ -39,4 +39,4 @@ class FFN:
         for row in range(len(dH)):
             db1 = vector_add(db1, dH[row])
 
-        return dW1, db1, dW2, db2, dX
+        return dX, dW1, db1, dW2, db2

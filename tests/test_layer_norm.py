@@ -1,6 +1,6 @@
 from layer_norm import LayerNorm
 
-def test_loss(Y, dY):
+def calculate_loss(Y, dY):
     loss = 0.0
 
     for row in range(len(Y)):
@@ -42,7 +42,7 @@ def test_layer_norm_input_gradient():
 
     layer_norm = LayerNorm(d_model=3)
 
-    X_norm = layer_norm.forward(X)
+    layer_norm.forward(X)
 
     dX, dGamma, dBeta = layer_norm.backward(dY)
 
@@ -55,8 +55,8 @@ def test_layer_norm_input_gradient():
     Y_plus = layer_norm.forward(X_plus)
     Y_minus = layer_norm.forward(X_minus)
 
-    L_plus = test_loss(Y_plus, dY)
-    L_minus = test_loss(Y_minus, dY)
+    L_plus = calculate_loss(Y_plus, dY)
+    L_minus = calculate_loss(Y_minus, dY)
 
     numerical_gradient = (L_plus - L_minus) / (2 * epsilon)
     analytical_gradient = dX[1][0]
@@ -93,11 +93,11 @@ def test_layer_norm_gamma_gradient():
 
     layer_norm.gamma = gamma_plus
     Y_plus = layer_norm.forward(X)
-    L_plus = test_loss(Y_plus, dY)
+    L_plus = calculate_loss(Y_plus, dY)
 
     layer_norm.gamma = gamma_minus
     Y_minus = layer_norm.forward(X)
-    L_minus = test_loss(Y_minus, dY)
+    L_minus = calculate_loss(Y_minus, dY)
 
     numerical_gradient = (L_plus - L_minus) / (2 * epsilon)
     analytical_gradient = dGamma[0]
@@ -134,11 +134,11 @@ def test_layer_norm_beta_gradient():
 
     layer_norm.beta = beta_plus
     Y_plus = layer_norm.forward(X)
-    L_plus = test_loss(Y_plus, dY)
+    L_plus = calculate_loss(Y_plus, dY)
 
     layer_norm.beta = beta_minus
     Y_minus = layer_norm.forward(X)
-    L_minus = test_loss(Y_minus, dY)
+    L_minus = calculate_loss(Y_minus, dY)
 
     numerical_gradient = (L_plus - L_minus) / (2 * epsilon)
     analytical_gradient = dBeta[0]

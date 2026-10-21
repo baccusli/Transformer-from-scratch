@@ -109,6 +109,11 @@ def random_matrix(rows, columns):
 
     return output
 
+def random_vector(length):
+    output = [random.uniform(-0.1, 0.1) for _ in range (length)]
+
+    return output
+
 def relu(A):
     rows = len(A)
     columns = len(A[0])
