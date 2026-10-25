@@ -1,4 +1,5 @@
 import random
+import math
 
 def matmul(A, B):
     if len(A[0]) != len(B):
@@ -155,3 +156,14 @@ def vector_add(a, b):
         output.append(a[i] + b[i])
 
     return output
+
+def softmax(x):
+    scores = []
+    for row in x:
+        maximum = max(row)
+        exponentials = [math.exp(value - maximum) for value in row]
+        s = sum(exponentials)
+        score =  [value / s for value in exponentials]
+        scores.append(score)
+
+    return scores
