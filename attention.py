@@ -42,27 +42,3 @@ def scaled_dot_product_attention(Q, K, V):
     output = matmul(attention_weights, V)
 
     return output, attention_weights
-
-Q = [
-    [1.0, 0.0, 0.0, 0.0],
-    [0.0, 1.0, 0.0, 0.0],
-    [0.0, 0.0, 1.0, 0.0] 
-]
-
-K = [
-    [1.0, 0.0, 0.0, 0.0],
-    [0.0, 1.0, 0.0, 0.0],
-    [0.0, 0.0, 1.0, 0.0] 
-]
-
-V = [
-    [10.0, 10.0, 10.0, 10.0],
-    [20.0, 20.0, 20.0, 20.0],
-    [30.0, 30.0, 30.0, 30.0]
-]
-
-output, attention_weights = scaled_dot_product_attention(Q, K , V)
-
-print(output)
-print("")
-print(attention_weights)
