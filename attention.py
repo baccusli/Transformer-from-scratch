@@ -11,6 +11,8 @@ def project_qkv(X, W_Q, W_K, W_V):
 def split_heads(X, num_heads):
     tokens = len(X)
     d_model = len(X[0])
+    if num_heads <= 0:
+        raise ValueError("num_heads must be positive")
     if (d_model % num_heads != 0):
         raise ValueError(f"d_model {d_model} must be divisible by num_heads {num_heads}")
 

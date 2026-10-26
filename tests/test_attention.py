@@ -1,4 +1,4 @@
-from attention import scaled_dot_product_attention
+from attention import scaled_dot_product_attention, split_heads
 import math
 
 def test_attetion_output_shape():
@@ -32,8 +32,6 @@ def test_attetion_output_shape():
     
     assert len(attention_weights) == rows and len(attention_weights[0]) == rows, f"Expected attention weights shape ({rows}, {rows}), got ({len(attention_weights)}, {len(attention_weights[0])})"
 
-    print("All shapes are correct passed!")
-
 def test_attention_weights_sum_one():
     Q = [
         [0.2789, -0.9500, -0.4499, -0.5536, 0.4729, 0.3534, 0.7844, -0.8261],
@@ -56,8 +54,6 @@ def test_attention_weights_sum_one():
     output, attention_weights = scaled_dot_product_attention(Q, K, V)
 
     assert all(math.isclose(sum(row), 1.0) for row in attention_weights), "Not all rows sum up to 1.0"
-
-    print("All rows sum up to 1.0")
 
 def test_attention_weights_are_nonnegative():
 
@@ -83,4 +79,18 @@ def test_attention_weights_are_nonnegative():
 
     assert all(weight >= 0 for row in attention_weights for weight in row), "Not all attention weights are nonnegative"
 
-    print("All attention weights are nonnegative")
+def test_split_heads_shape():
+    X = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7]
+    ]
+
+    num_heads = 2
+
+    heads = split_heads(X, num_heads)
+
+    assert len(heads) == num_heads, f"Expected {num_heads} heads, got {len(heads)}"
+
+    assert len(heads[0]) == len(X), f"Expected {len(X)} tokens, got {len(heads[0])} tokens"
+
+    assert len(heads[0][0]) == len(X[0]) // num_heads, f"Expected {len(X[0]) // num_heads} features, got {len(heads[0][0])} features"
