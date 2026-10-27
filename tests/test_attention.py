@@ -94,3 +94,18 @@ def test_split_heads_shape():
     assert all(len(head) == len(X) for head in heads), f"At least one head has an incorrect number of tokens"
 
     assert all(len(token) == len(X[0]) // num_heads for head in heads for token in head), f"At least on token has an incorrect number of features"
+
+def test_split_heads_values():
+    X = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7]
+    ]
+
+    expected = [
+        [[0, 1], [4, 5]],
+        [[2, 3], [6, 7]]
+    ]
+
+    result = split_heads(X, 2)
+
+    assert result == expected, f"Expected {expected}, got {result}"
