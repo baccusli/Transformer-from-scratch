@@ -1,4 +1,4 @@
-from attention import scaled_dot_product_attention, split_heads
+from attention import scaled_dot_product_attention, split_heads, concatenate_heads
 import math
 
 def test_attetion_output_shape():
@@ -107,5 +107,20 @@ def test_split_heads_values():
     ]
 
     result = split_heads(X, 2)
+
+    assert result == expected, f"Expected {expected}, got {result}"
+
+def test_concatenate_heads_values():
+    heads = [
+        [[0, 1], [4, 5]],
+        [[2, 3], [6, 7]]
+    ]
+
+    expected = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7]
+    ]
+
+    result = concatenate_heads(heads)
 
     assert result == expected, f"Expected {expected}, got {result}"
