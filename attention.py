@@ -29,6 +29,17 @@ def split_heads(X, num_heads):
 
     return heads
 
+def concatenate_heads(heads):
+    result = []
+    for step in range(len(heads[0])):
+        concatenated_row = []
+        for head in heads:
+            for feature in head[step]:
+                concatenated_row.append(feature)
+        result.append(concatenated_row)
+
+    return result 
+
 def scaled_dot_product_attention(Q, K, V):
     scores = matmul(Q, transpose(K))
     d = len(K[0])
