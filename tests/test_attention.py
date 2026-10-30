@@ -124,3 +124,16 @@ def test_concatenate_heads_values():
     result = concatenate_heads(heads)
 
     assert result == expected, f"Expected {expected}, got {result}"
+
+def test_split_and_concatenate_reversibility():
+    X = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7]
+    ]
+
+    heads = split_heads(X, 2)
+
+    result = concatenate_heads(heads)
+
+    assert result == X, f"Reversibility test failed, Expected {X}, got {result}."
+    
